@@ -126,7 +126,7 @@ export const pagesContent: PageContent[] = [
         headline: { type: 'input', value: '' },
         subheadline: { type: 'input', value: '' },
         phoneNumber: { type: 'input', value: '' },
-        email: { type: 'input', value: '' },
+        emailAddress: { type: 'input', value: '' },
         location: { type: 'input', value: '' },
       },
       footer: {

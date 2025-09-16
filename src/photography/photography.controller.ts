@@ -10,12 +10,14 @@ import {
   UploadedFile,
   UseInterceptors,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { PhotographyService } from './photography.service';
 import { CreatePhotographyDto } from './dto/create-photography.dto';
 import { UpdatePhotographyDto } from './dto/update-photography.dto';
 import { PaginationDto } from 'src/common/pagination.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('photographies')
 export class PhotographyController {
@@ -37,6 +39,7 @@ export class PhotographyController {
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('image'))
   async create(
     @Body() dto: CreatePhotographyDto,
@@ -46,6 +49,7 @@ export class PhotographyController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('image'))
   async update(
     @Param('id') id: string,
@@ -56,6 +60,7 @@ export class PhotographyController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   async delete(@Param('id') id: string) {
     return this.photographyService.deletePhotography(id);
   }

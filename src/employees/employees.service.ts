@@ -10,7 +10,17 @@ import { Employee } from './schema/employee.schema';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { IsMongoId, IsNumber, IsNotEmpty } from 'class-validator';
 
+export class ReorderEmployeeDto {
+  @IsMongoId()
+  @IsNotEmpty()
+  employee: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  order: number;
+}
 @Injectable()
 export class EmployeesService {
   constructor(
@@ -72,12 +82,24 @@ export class EmployeesService {
 
   async createEmployee(data: CreateEmployeeDto, image: Express.Multer.File) {
     if (!image) throw new BadRequestException('Employee image is required');
+
     try {
+      // Upload image to Cloudinary
       const { public_id, secure_url } =
         await this.cloudinaryService.uploadImage(image, 'employees/images');
 
+      // Find the current max order
+      const lastEmployee = await this.employeeModel
+        .findOne()
+        .sort({ order: -1 })
+        .select('order')
+        .exec();
+      const newOrder = lastEmployee ? lastEmployee.order + 1 : 1;
+
+      // Create employee with the correct order
       const employee = await this.employeeModel.create({
         ...data,
+        order: newOrder,
         image: {
           public_id,
           url: secure_url,
@@ -158,6 +180,41 @@ export class EmployeesService {
 
     return {
       message: 'Employee deleted successfully',
+    };
+  }
+
+  async reorderEmployees(reorderData: { employee: string; order: number }[]) {
+    if (!Array.isArray(reorderData) || reorderData.length === 0) {
+      throw new BadRequestException('Reorder data must be a non-empty array');
+    }
+
+    // Validate IDs
+    reorderData.forEach((item) => {
+      if (!isValidObjectId(item.employee)) {
+        throw new BadRequestException(`Invalid employee ID: ${item.employee}`);
+      }
+    });
+
+    // Bulk update all employees with new order
+    const bulkOps = reorderData.map((item) => ({
+      updateOne: {
+        filter: { _id: item.employee },
+        update: { $set: { order: item.order } },
+      },
+    }));
+
+    try {
+      await this.employeeModel.bulkWrite(bulkOps);
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to reorder employees');
+    }
+
+    // Return updated employees sorted by order
+    const employees = await this.employeeModel.find().sort({ order: 1 }).exec();
+
+    return {
+      message: 'Employees reordered successfully',
+      payload: employees,
     };
   }
 }

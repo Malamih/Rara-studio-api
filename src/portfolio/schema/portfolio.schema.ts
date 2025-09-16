@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class Portfolio extends Document {
+export class Portfolio {
   @Prop({ required: true, type: String })
   name: string;
   @Prop({
@@ -46,6 +46,8 @@ export class Portfolio extends Document {
   client: Types.ObjectId;
   @Prop({ required: false, type: String })
   projectDate: string;
+  @Prop({ required: false, Type: Boolean, default: false })
+  isSelected: boolean;
 }
 
 export const PortfolioSchema = SchemaFactory.createForClass(Portfolio);

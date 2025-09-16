@@ -9,12 +9,14 @@ import {
   UploadedFiles,
   UseInterceptors,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { PortfolioService } from './portfolio.service';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 import { PaginationDto } from 'src/common/pagination.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('portfolios')
 export class PortfolioController {
@@ -29,12 +31,19 @@ export class PortfolioController {
     return this.portfolioService.getPortfolios(paginationDto, search);
   }
 
+  // Get selected portfolio
+  @Get('selected')
+  async getSelected() {
+    return this.portfolioService.getSelectedPortfolio();
+  }
+
   @Get(':id')
   async getById(@Param('id') id: string) {
     return this.portfolioService.getPortfolioById(id);
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'image', maxCount: 1 },
@@ -61,6 +70,7 @@ export class PortfolioController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(
     FileFieldsInterceptor([
       { name: 'image', maxCount: 1 },
@@ -87,7 +97,14 @@ export class PortfolioController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   async delete(@Param('id') id: string) {
     return this.portfolioService.deletePortfolio(id);
+  }
+
+  @Put(':id/toggle-selection')
+  @UseGuards(AuthGuard('jwt'))
+  async toggleSelection(@Param('id') id: string) {
+    return this.portfolioService.togglePortfolioSelection(id);
   }
 }

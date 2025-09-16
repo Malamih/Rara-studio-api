@@ -117,6 +117,49 @@ export class PortfolioService {
     };
   }
 
+  async togglePortfolioSelection(id: string) {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException('Invalid portfolio ID');
+    }
+
+    const portfolio = await this.portfolioModel.findById(id);
+    if (!portfolio) throw new BadRequestException('Portfolio not found');
+
+    // أول شيء ألغِ تحديد كل البورتفوليوز الأخرى
+    await this.portfolioModel.updateMany(
+      { isSelected: true },
+      { $set: { isSelected: false } },
+    );
+
+    if (portfolio.isSelected == true) {
+      // إلغاء تحديد هذا البورتفوليو
+      await this.portfolioModel.updateOne(
+        { _id: portfolio._id },
+        { $set: { isSelected: false } },
+      );
+
+      const updated = await this.portfolioModel.findById(id);
+
+      return {
+        payload: updated,
+        message: 'Portfolio deselected successfully',
+      };
+    } else {
+      // تحديد هذا البورتفوليو
+      await this.portfolioModel.updateOne(
+        { _id: portfolio._id },
+        { $set: { isSelected: true } },
+      );
+
+      const updated = await this.portfolioModel.findById(id);
+
+      return {
+        payload: updated,
+        message: 'Portfolio selected successfully',
+      };
+    }
+  }
+
   // ------------------ CREATE PORTFOLIO ------------------
   async createPortfolio(
     portfolioData: CreatePortfolioDto,
@@ -165,7 +208,13 @@ export class PortfolioService {
       files?.image && (await uploadFile(files?.image, 'portfolios'));
     const banner =
       files?.banner && (await uploadFile(files?.banner, 'portfolios'));
+    const selectedPortfolios = await this.portfolioModel.find({
+      isSelected: true,
+    });
 
+    if (selectedPortfolios?.length < 1) {
+      portfolioData.isSelected = true;
+    }
     const newPortfolio = await this.portfolioModel.create({
       ...portfolioData,
       client: new Types.ObjectId(portfolioData.client),
@@ -271,6 +320,22 @@ export class PortfolioService {
     return {
       payload: updatedPortfolio,
       message: 'Portfolio updated successfully',
+    };
+  }
+
+  async getSelectedPortfolio() {
+    const portfolio = await this.portfolioModel
+      .findOne({ isSelected: true })
+      .populate('client')
+      .exec();
+
+    if (!portfolio) {
+      throw new BadRequestException('No selected portfolio found');
+    }
+
+    return {
+      payload: portfolio,
+      message: 'Selected portfolio retrieved successfully',
     };
   }
 

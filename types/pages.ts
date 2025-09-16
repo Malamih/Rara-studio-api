@@ -157,7 +157,7 @@ export type ContactPageContent = {
       headline: InputField;
       subheadline: InputField;
       phoneNumber: InputField;
-      email: InputField;
+      emailAddress: InputField;
       location: InputField;
     };
     footer: {

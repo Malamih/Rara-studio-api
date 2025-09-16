@@ -1,5 +1,6 @@
 import {
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   ValidateNested,
@@ -22,7 +23,7 @@ export class CreateEmployeeDto {
   name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   position: string;
 
   @ValidateNested()
@@ -30,7 +31,7 @@ export class CreateEmployeeDto {
   image: EmployeeImageDto;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   caption: string;
 
   @IsString()
@@ -44,4 +45,7 @@ export class CreateEmployeeDto {
   @IsString()
   @IsOptional()
   linkedin?: string;
+  @IsOptional()
+  @IsNumber()
+  order?: number;
 }

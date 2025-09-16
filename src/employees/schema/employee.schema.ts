@@ -6,7 +6,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export class Employee {
   @Prop({ required: true })
   name: string;
-  @Prop({ required: true })
+  @Prop({ required: false })
   position: string;
   @Prop({
     required: true,
@@ -20,7 +20,7 @@ export class Employee {
     url: string;
   };
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   caption: string;
   @Prop({ type: String, required: false })
   facebook: string;
@@ -28,6 +28,8 @@ export class Employee {
   github: string;
   @Prop({ type: String, required: false })
   linkedin: string;
+  @Prop({ type: Number, required: false })
+  order: number;
 }
 
 export const employeeSchema = SchemaFactory.createForClass(Employee);

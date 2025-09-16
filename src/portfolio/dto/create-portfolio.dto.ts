@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   IsMongoId,
   IsDateString,
+  IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Types } from 'mongoose';
@@ -58,4 +59,8 @@ export class CreatePortfolioDto {
   @IsArray()
   @IsMongoId({ each: true })
   videography?: Types.ObjectId[];
+
+  @IsOptional()
+  @IsBoolean()
+  isSelected?: boolean;
 }
