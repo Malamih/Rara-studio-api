@@ -173,9 +173,78 @@ export type ContactPageContent = {
   };
 };
 
+export type StudioRentalPageContent = {
+  name: 'studio-rental';
+  sections: {
+    hero: {
+      headline: InputField;
+      subheadline: InputField;
+      description: TextareaField;
+    };
+    gallery: {
+      firstImage: ImageField;
+      secondImage: ImageField;
+    };
+    amenities: {
+      amenitiesList: RichTextField;
+    };
+    callToAction: {
+      title: RichTextField;
+      caption: RichTextField;
+    };
+  };
+};
+
+export type PropsRentalPageContent = {
+  name: 'props-rental';
+  sections: {
+    hero: {
+      headline: InputField;
+      subheadline: InputField;
+      description: TextareaField;
+    };
+    gallery: {
+      firstImage: ImageField;
+      secondImage: ImageField;
+    };
+    amenities: {
+      amenitiesList: RichTextField;
+    };
+    callToAction: {
+      title: RichTextField;
+      caption: RichTextField;
+    };
+  };
+};
+
+export type EquipmentRentalPageContent = {
+  name: 'equipment-rental';
+  sections: {
+    hero: {
+      headline: InputField;
+      subheadline: InputField;
+      description: TextareaField;
+    };
+    gallery: {
+      firstImage: ImageField;
+      secondImage: ImageField;
+    };
+    amenities: {
+      amenitiesList: RichTextField;
+    };
+    callToAction: {
+      title: RichTextField;
+      caption: RichTextField;
+    };
+  };
+};
+
 export type PageContent =
   | HomePageContent
   | AboutPageContent
   | ServicesPageContent
   | PortfolioPageContent
-  | ContactPageContent;
+  | ContactPageContent
+  | StudioRentalPageContent
+  | PropsRentalPageContent
+  | EquipmentRentalPageContent;

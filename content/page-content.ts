@@ -141,4 +141,67 @@ export const pagesContent: PageContent[] = [
       },
     },
   },
+  {
+    name: 'studio-rental',
+    sections: {
+      hero: {
+        headline: { type: 'input', value: '' },
+        subheadline: { type: 'input', value: '' },
+        description: { type: 'richtext', value: '' },
+      },
+      gallery: {
+        firstImage: { type: 'image', value: '' },
+        secondImage: { type: 'image', value: '' },
+      },
+      amenities: {
+        amenitiesList: { type: 'richtext', value: '' },
+      },
+      callToAction: {
+        title: { type: 'richtext', value: '' },
+        caption: { type: 'richtext', value: '' },
+      },
+    },
+  },
+  {
+    name: 'props-rental',
+    sections: {
+      hero: {
+        headline: { type: 'input', value: '' },
+        subheadline: { type: 'input', value: '' },
+        description: { type: 'richtext', value: '' },
+      },
+      gallery: {
+        firstImage: { type: 'image', value: '' },
+        secondImage: { type: 'image', value: '' },
+      },
+      amenities: {
+        amenitiesList: { type: 'richtext', value: '' },
+      },
+      callToAction: {
+        title: { type: 'richtext', value: '' },
+        caption: { type: 'richtext', value: '' },
+      },
+    },
+  },
+  {
+    name: 'equipment-rental',
+    sections: {
+      hero: {
+        headline: { type: 'input', value: '' },
+        subheadline: { type: 'input', value: '' },
+        description: { type: 'richtext', value: '' },
+      },
+      gallery: {
+        firstImage: { type: 'image', value: '' },
+        secondImage: { type: 'image', value: '' },
+      },
+      amenities: {
+        amenitiesList: { type: 'richtext', value: '' },
+      },
+      callToAction: {
+        title: { type: 'richtext', value: '' },
+        caption: { type: 'richtext', value: '' },
+      },
+    },
+  },
 ];
